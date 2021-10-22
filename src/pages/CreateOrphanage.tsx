@@ -2,6 +2,7 @@ import React, { ChangeEvent, FormEvent, useState } from "react";
 import { Map, Marker, TileLayer } from 'react-leaflet';
 import { LeafletMouseEvent } from 'leaflet';
 import { useHistory } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 import { FiPlus } from "react-icons/fi";
 
@@ -37,7 +38,7 @@ export default function OrphanageMap() {
   }
 
   function handleSelectImages(event: ChangeEvent<HTMLInputElement>) {
-    if(!event.target.files) {
+    if (!event.target.files) {
       return;
     }
 
@@ -52,10 +53,10 @@ export default function OrphanageMap() {
     setPreviewImages(selectedImagesPreview)
   }
 
-   async function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
-    const {latitude, longitude} = position;
+    const { latitude, longitude } = position;
 
     const data = new FormData();
 
@@ -73,7 +74,7 @@ export default function OrphanageMap() {
 
     await api.post('orphanages', data)
 
-    alert('Cadastro realizado com sucesso!')
+    toast.success('Cadastro realizado com sucesso!')
 
     history.push('/app');
   }
@@ -81,6 +82,8 @@ export default function OrphanageMap() {
   return (
     <div id="page-create-orphanage">
       <Sidebar />
+
+      <Toaster position="top-center" reverseOrder={false} />
 
       <main>
         <form onSubmit={handleSubmit} className="create-orphanage-form">
@@ -111,20 +114,20 @@ export default function OrphanageMap() {
 
             <div className="input-block">
               <label htmlFor="name">Nome</label>
-              <input 
-              id="name" 
-              value={name} 
-              onChange={event => setName(event.target.value)} 
+              <input
+                id="name"
+                value={name}
+                onChange={event => setName(event.target.value)}
               />
             </div>
 
             <div className="input-block">
               <label htmlFor="about">Sobre <span>Máximo de 300 caracteres</span></label>
-              <textarea 
-              id="name" 
-              maxLength={300} 
-              value={about} 
-              onChange={event => setAbout(event.target.value)} 
+              <textarea
+                id="name"
+                maxLength={300}
+                value={about}
+                onChange={event => setAbout(event.target.value)}
               />
             </div>
 
@@ -132,18 +135,18 @@ export default function OrphanageMap() {
               <label htmlFor="images">Fotos</label>
 
               <div className="images-container">
-                {previewImages.map(image =>{
+                {previewImages.map(image => {
                   return (
                     <img key={image} src={image} alt={name} />
                   )
                 })}
-              <label htmlFor="images[]" className="new-image">
-                <FiPlus size={24} color="#15b6d6" />
-              </label>
-            </div>
-
-            <input multiple onChange={handleSelectImages} type="file" id="images[]" />
+                <label htmlFor="images[]" className="new-image">
+                  <FiPlus size={24} color="#15b6d6" />
+                </label>
               </div>
+
+              <input multiple onChange={handleSelectImages} type="file" id="images[]" />
+            </div>
           </fieldset>
 
           <fieldset>
@@ -151,19 +154,19 @@ export default function OrphanageMap() {
 
             <div className="input-block">
               <label htmlFor="instructions">Instruções</label>
-              <textarea 
-              id="instructions" 
-              value={instructions} 
-              onChange={event => setInstructions(event.target.value)} 
+              <textarea
+                id="instructions"
+                value={instructions}
+                onChange={event => setInstructions(event.target.value)}
               />
             </div>
 
             <div className="input-block">
               <label htmlFor="opening_hours">Horário de funcionamento</label>
-              <input 
-              id="opening_hours" 
-              value={opening_hours} 
-              onChange={event => setOpeningHours(event.target.value)} 
+              <input
+                id="opening_hours"
+                value={opening_hours}
+                onChange={event => setOpeningHours(event.target.value)}
               />
             </div>
 
@@ -171,17 +174,17 @@ export default function OrphanageMap() {
               <label htmlFor="open_on_weekends">Atende fim de semana</label>
 
               <div className="button-select">
-                <button 
-                type="button" 
-                className={open_on_weekends ? 'active' : ''}
-                onClick={() => setOpenOnWeekends(true)}
+                <button
+                  type="button"
+                  className={open_on_weekends ? 'active' : ''}
+                  onClick={() => setOpenOnWeekends(true)}
                 >
                   Sim
                 </button>
                 <button
-                type="button"
-                className={!open_on_weekends ? 'active' : ''}
-                onClick={() => setOpenOnWeekends(false)}
+                  type="button"
+                  className={!open_on_weekends ? 'active' : ''}
+                  onClick={() => setOpenOnWeekends(false)}
                 >
                   Não
                 </button>
